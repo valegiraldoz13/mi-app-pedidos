@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pedidos de Ropa Infantil - Tu Empresa</title>
+    <!-- Carga de Tailwind CSS para estilos rápidos y responsivos -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        /* Estilos personalizados para la fuente y algunos ajustes */
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f0f4f8; /* Un color de fondo suave */
+        }
+        .container {
+            max-width: 1000px; /* Aumentado el ancho para la tabla */
+        }
+        /* Estilos para mensajes de estado */
+        .message-box {
+            padding: 1rem;
+            margin-top: 1rem;
+            border-radius: 0.5rem;
+            font-weight: bold;
+            display: none; /* Oculto por defecto */
+        }
+        .message-box.success {
+            background-color: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+        .message-box.error {
+            background-color: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+        /* Estilos para la tabla */
+        .product-table th, .product-table td {
+            padding: 0.75rem;
+            text-align: left;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        .product-table th {
+            background-color: #edf2f7;
+            font-weight: 600;
+            color: #4a5568;
+        }
+        .product-table input[type="text"],
+        .product-table input[type="number"],
+        .product-table select,
+        .product-table textarea {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #cbd5e0;
+            border-radius: 0.25rem;
+            font-size: 0.9rem;
+        }
+        .product-table tfoot td {
+            font-weight: bold;
+            background-color: #e2e8f0;
+            border-top: 2px solid #a0aec0;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen p-4">
+    <div class="container bg-white p-8 rounded-xl shadow-lg w-full">
+        <h1 class="text-4xl font-extrabold text-center text-blue-800 mb-8">Gestión de Pedidos</h1>
+        <p class="text-center text-gray-600 mb-6">Ingresa los detalles del pedido a continuación.</p>
+
+        <form id="orderForm" class="space-y-6">
+            <!-- Sección de Fecha del Pedido (movida al inicio) -->
+            <div class="bg-yellow-50 p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-semibold text-yellow-700 mb-4">Fecha del Pedido</h2>
+                <div>
+                    <label for="orderDate" class="block text-sm font-medium text-gray-700 mb-1">Fecha del Pedido</label>
+                    <input type="date" id="orderDate" name="orderDate" required
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-yellow-500 focus:border-yellow-500 sm:text-base">
+                </div>
+            </div>
+
+            <!-- Sección de Información del Cliente -->
+            <div class="bg-blue-50 p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-semibold text-blue-700 mb-4">Datos del Cliente</h2>
+                <div>
+                    <label for="customerName" class="block text-sm font-medium text-gray-700 mb-1">Nombre del Cliente</label>
+                    <input type="text" id="customerName" name="customerName" required
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base">
+                </div>
+                <div>
+                    <label for="customerNit" class="block text-sm font-medium text-gray-700 mb-1 mt-4">NIT</label>
+                    <input type="text" id="customerNit" name="customerNit"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base">
+                </div>
+                <div>
+                    <label for="customerAddress" class="block text-sm font-medium text-gray-700 mb-1 mt-4">Dirección</label>
+                    <input type="text" id="customerAddress" name="customerAddress" required
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base">
+                </div>
+                <div>
+                    <label for="customerCity" class="block text-sm font-medium text-gray-700 mb-1 mt-4">Ciudad</label>
+                    <input type="text" id="customerCity" name="customerCity" required
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base">
+                </div>
+                <div>
+                    <label for="customerPhone" class="block text-sm font-medium text-gray-700 mb-1 mt-4">Teléfono de Contacto</label>
+                    <input type="tel" id="customerPhone" name="customerPhone" required
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base">
+                </div>
+                <div>
+                    <label for="customerEmail" class="block text-sm font-medium text-gray-700 mb-1 mt-4">Correo Electrónico (Opcional)</label>
+                    <input type="email" id="customerEmail" name="customerEmail"
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base">
+                </div>
+                <div>
+                    <label for="sellerName" class="block text-sm font-medium text-gray-700 mb-1 mt-4">Nombre Vendedor</label>
+                    <input type="text" id="sellerName" name="sellerName" required
+                           class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-blue-500 focus:border-blue-500 sm:text-base">
+                </div>
+            </div>
+
+            <!-- Sección de Detalles del Pedido con Tabla -->
+            <div class="bg-green-50 p-6 rounded-lg shadow-sm">
+                <h2 class="text-2xl font-semibold text-green-700 mb-4">Detalles del Pedido</h2>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full product-table">
+                        <thead>
+                            <tr>
+                                <th class="w-1/6">Referencia</th>
+                                <th class="w-2/6">Nombre del Producto</th>
+                                <th class="w-1/6">Precio Venta</th>
+                                <th class="w-1/12">Cantidad</th>
+                                <th class="w-1/12">Total</th>
+                                <th class="w-1/6">Notas Adicionales</th>
+                                <th class="w-auto"></th> <!-- Columna para el botón de eliminar -->
+                            </tr>
+                        </thead>
+                        <tbody id="productRows">
+                            <!-- Filas de productos se añadirán aquí dinámicamente -->
+                        </tbody>
+                        <tfoot class="bg-gray-200">
+                            <tr>
+                                <td colspan="4" class="text-right">Total General:</td>
+                                <td id="grandTotal" class="text-left">0.00</td>
+                                <td colspan="2"></td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+                <div class="flex justify-end mt-4">
+                    <button type="button" id="addProductBtn"
+                            class="px-6 py-2 bg-purple-600 text-white font-bold rounded-full shadow-lg hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105">
+                        Añadir Producto
+                    </button>
+                </div>
+            </div>
+
+            <!-- Botones de Envío -->
+            <div class="flex flex-col sm:flex-row justify-center gap-4 mt-6">
+                <button type="submit"
+                        class="w-full sm:w-auto px-8 py-3 bg-blue-600 text-white font-bold rounded-full shadow-lg hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105">
+                    Registrar Pedido (a Google Sheets Existente)
+                </button>
+                <button type="button" id="generateSheetAndWhatsAppBtn"
+                        class="w-full sm:w-auto px-8 py-3 bg-green-500 text-white font-bold rounded-full shadow-lg hover:bg-green-600 focus:outline-none focus:ring-2 focus:ring-green-400 focus:ring-offset-2 transition duration-300 ease-in-out transform hover:scale-105">
+                    Generar Hoja & Enviar por WhatsApp
+                </button>
+            </div>
+        </form>
+
+        <!-- Contenedor para mensajes de estado -->
+        <div id="messageContainer" class="message-box"></div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const orderForm = document.getElementById('orderForm');
+            const productRowsContainer = document.getElementById('productRows');
+            const addProductBtn = document.getElementById('addProductBtn');
+            const generateSheetAndWhatsAppBtn = document.getElementById('generateSheetAndWhatsAppBtn'); // Nuevo botón
+            const messageContainer = document.getElementById('messageContainer');
+            const grandTotalDisplay = document.getElementById('grandTotal');
+
+            // --- Base de datos de productos simulada ---
+            // En un entorno real, esto vendría de una API o una base de datos.
+            const products = [
+                { reference: 'RP001', name: 'Body Bebé Algodón Orgánico', price: 15.99 },
+                { reference: 'RP002', name: 'Conjunto Pijama Dinosaurio', price: 22.50 },
+                { reference: 'RP003', name: 'Vestido Floral Verano Niña', price: 28.00 },
+                { reference: 'RP004', name: 'Pantalón Cargo Ajustable Niño', price: 18.75 },
+                { reference: 'RP005', name: 'Calcetines Antideslizantes Pack x3', price: 8.99 },
+                { reference: 'RP006', name: 'Chaqueta Impermeable Infantil', price: 35.00 },
+                { reference: 'RP007', name: 'Gorro de Lana con Pompones', price: 12.00 },
+            ];
+
+            // Función para mostrar mensajes de estado
+            function showMessage(message, type) {
+                messageContainer.textContent = message;
+                messageContainer.className = `message-box ${type}`; // Añade la clase de tipo (success/error)
+                messageContainer.style.display = 'block'; // Muestra el contenedor
+                // Oculta el mensaje después de 5 segundos
+                setTimeout(() => {
+                    messageContainer.style.display = 'none';
+                }, 5000);
+            }
+
+            // Función para calcular el total de una fila de producto
+            function calculateRowTotal(row) {
+                const priceInput = row.querySelector('.product-price-input');
+                const quantityInput = row.querySelector('input[type="number"]');
+                const totalInput = row.querySelector('.product-total-input');
+
+                const price = parseFloat(priceInput.value) || 0;
+                const quantity = parseInt(quantityInput.value) || 0;
+                const total = price * quantity;
+
+                totalInput.value = total.toFixed(2); // Muestra el total con 2 decimales
+                updateGrandTotal(); // Actualiza el total general cada vez que cambia un total de fila
+            }
+
+            // Función para actualizar el total general
+            function updateGrandTotal() {
+                let grandTotal = 0;
+                const rows = productRowsContainer.querySelectorAll('tr');
+                rows.forEach(row => {
+                    const totalInput = row.querySelector('.product-total-input');
+                    grandTotal += parseFloat(totalInput.value) || 0;
+                });
+                grandTotalDisplay.textContent = grandTotal.toFixed(2); // Muestra el total general
+            }
+
+            // Función para añadir una nueva fila de producto a la tabla
+            function addProductRow() {
+                const newRow = document.createElement('tr');
+                const rowIndex = productRowsContainer.children.length; // Índice para identificar la fila
+
+                newRow.innerHTML = `
+                    <td>
+                        <select name="productReference_${rowIndex}" class="product-reference-select" required>
+                            <option value="">Selecciona una referencia</option>
+                            ${products.map(p => `<option value="${p.reference}">${p.reference}</option>`).join('')}
+                        </select>
+                    </td>
+                    <td>
+                        <input type="text" name="productName_${rowIndex}" class="product-name-input" readonly required>
+                    </td>
+                    <td>
+                        <input type="text" name="productPrice_${rowIndex}" class="product-price-input" readonly required>
+                    </td>
+                    <td>
+                        <input type="number" name="quantity_${rowIndex}" value="1" min="1" required>
+                    </td>
+                    <td>
+                        <input type="text" name="productTotal_${rowIndex}" class="product-total-input" readonly>
+                    </td>
+                    <td>
+                        <textarea name="itemNotes_${rowIndex}" rows="1"></textarea>
+                    </td>
+                    <td>
+                        <button type="button" class="remove-product-btn px-3 py-1 bg-red-500 text-white rounded-md hover:bg-red-600">X</button>
+                    </td>
+                `;
+                productRowsContainer.appendChild(newRow);
+
+                // Añadir event listeners para la nueva fila
+                const selectElement = newRow.querySelector('.product-reference-select');
+                const quantityInput = newRow.querySelector('input[type="number"]');
+                const removeButton = newRow.querySelector('.remove-product-btn');
+
+                selectElement.addEventListener('change', (event) => {
+                    const selectedReference = event.target.value;
+                    const selectedProduct = products.find(p => p.reference === selectedReference);
+                    const productNameInput = newRow.querySelector('.product-name-input');
+                    const productPriceInput = newRow.querySelector('.product-price-input');
+
+                    if (selectedProduct) {
+                        productNameInput.value = selectedProduct.name;
+                        productPriceInput.value = selectedProduct.price.toFixed(2); // Formatear a 2 decimales
+                    } else {
+                        productNameInput.value = '';
+                        productPriceInput.value = '';
+                    }
+                    calculateRowTotal(newRow); // Recalcular el total de la fila al cambiar la referencia
+                });
+
+                quantityInput.addEventListener('input', () => {
+                    calculateRowTotal(newRow); // Recalcular el total de la fila al cambiar la cantidad
+                });
+
+                removeButton.addEventListener('click', () => {
+                    newRow.remove();
+                    updateGrandTotal(); // Actualizar el total general al eliminar una fila
+                });
+
+                // Calcular el total inicial para la nueva fila
+                calculateRowTotal(newRow);
+            }
+
+            // Añadir la primera fila de producto al cargar la página
+            addProductRow();
+
+            // Event listener para el botón "Añadir Producto"
+            addProductBtn.addEventListener('click', addProductRow);
+
+            // Función para obtener todos los datos del formulario
+            function getOrderData() {
+                // Recolectar los datos del cliente
+                const customerData = {
+                    orderDate: document.getElementById('orderDate').value,
+                    customerName: document.getElementById('customerName').value,
+                    customerNit: document.getElementById('customerNit').value,
+                    customerAddress: document.getElementById('customerAddress').value,
+                    customerCity: document.getElementById('customerCity').value,
+                    customerPhone: document.getElementById('customerPhone').value,
+                    customerEmail: document.getElementById('customerEmail').value,
+                    sellerName: document.getElementById('sellerName').value
+                };
+
+                // Recolectar los datos de los productos de la tabla
+                const productItems = [];
+                const rows = productRowsContainer.querySelectorAll('tr');
+                rows.forEach((row, index) => {
+                    const reference = row.querySelector(`[name="productReference_${index}"]`).value;
+                    const name = row.querySelector(`[name="productName_${index}"]`).value;
+                    const price = parseFloat(row.querySelector(`[name="productPrice_${index}"]`).value);
+                    const quantity = parseInt(row.querySelector(`[name="quantity_${index}"]`).value);
+                    const total = parseFloat(row.querySelector(`[name="productTotal_${index}"]`).value);
+                    const notes = row.querySelector(`[name="itemNotes_${index}"]`).value;
+
+                    if (reference) {
+                        productItems.push({
+                            reference,
+                            name,
+                            price,
+                            quantity,
+                            total,
+                            notes
+                        });
+                    }
+                });
+
+                return {
+                    customer: customerData,
+                    products: productItems,
+                    grandTotal: parseFloat(grandTotalDisplay.textContent)
+                };
+            }
+
+            // Manejar el envío del formulario (para Google Sheets Existente)
+            orderForm.addEventListener('submit', async (event) => {
+                event.preventDefault();
+
+                const fullOrderData = getOrderData();
+
+                if (fullOrderData.products.length === 0) {
+                    showMessage('Por favor, añade al menos un producto al pedido.', 'error');
+                    return;
+                }
+
+                console.log('Datos completos del pedido a enviar (a Google Sheets Existente):', fullOrderData);
+
+                const netlifyFunctionUrl = '/.netlify/functions/add-order-to-sheet'; // ESTA ES UNA URL DE EJEMPLO
+
+                try {
+                    const response = await fetch(netlifyFunctionUrl, {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json',
+                        },
+                        body: JSON.stringify(fullOrderData),
+                    });
+
+                    if (response.ok) {
+                        showMessage('¡Pedido registrado con éxito en la hoja existente! (Simulado)', 'success');
+                        orderForm.reset();
+                        productRowsContainer.innerHTML = '';
+                        addProductRow();
+                    } else {
+                        const errorText = await response.text();
+                        console.error('Error al registrar el pedido (simulado):', errorText);
+                        showMessage(`Error al registrar el pedido: ${errorText || 'Error desconocido'} (Simulado)`, 'error');
+                    }
+                } catch (error) {
+                    console.error('Error de red o de la función (simulado):', error);
+                    showMessage('Hubo un problema de conexión o del sistema. Inténtalo de nuevo. (Simulado)', 'error');
+                }
+            });
+
+            // Manejar la generación de nueva hoja y envío por WhatsApp
+            generateSheetAndWhatsAppBtn.addEventListener('click', async () => {
+                const fullOrderData = getOrderData();
+
+                if (fullOrderData.products.length === 0) {
+                    showMessage('Por favor, añade al menos un producto al pedido para generar la hoja y enviar por WhatsApp.', 'error');
+                    return;
+                }
+
+                showMessage('Generando hoja de pedido y preparando mensaje de WhatsApp...', 'info');
+
+                // --- SIMULACIÓN DE LLAMADA A NETLIFY FUNCTION PARA CREAR NUEVA HOJA ---
+                // En un entorno real, esta función de Netlify recibiría fullOrderData,
+                // crearía una nueva Google Sheet, la llenaría, configuraría permisos
+                // y devolvería la URL de la nueva hoja.
+                const generateSheetFunctionUrl = '/.netlify/functions/generate-order-sheet'; // URL de tu nueva función
+
+                let sheetUrl = '';
+                try {
+                    // Simulación de una respuesta de la Netlify Function con una URL de hoja
+                    // En la implementación real, harías un 'fetch' a 'generateSheetFunctionUrl'
+                    // y esperarías la URL real de la hoja.
+                    // const response = await fetch(generateSheetFunctionUrl, {
+                    //     method: 'POST',
+                    //     headers: { 'Content-Type': 'application/json' },
+                    //     body: JSON.stringify(fullOrderData),
+                    // });
+                    // const result = await response.json();
+                    // if (response.ok && result.sheetUrl) {
+                    //     sheetUrl = result.sheetUrl;
+                    // } else {
+                    //     throw new Error(result.error || 'No se pudo generar la URL de la hoja.');
+                    // }
+
+                    // --- SIMULACIÓN DE URL DE HOJA ---
+                    // Reemplaza esto con la URL real que te devolvería tu Netlify Function
+                    sheetUrl = `https://docs.google.com/spreadsheets/d/1A2B3C4D5E6F7G8H9I0J_K_L_M_N_O_P_Q_R_S_T_U_V_W_X_Y_Z/edit#gid=0`; // URL de ejemplo
+                    showMessage('Hoja de pedido generada (simulada). Preparando mensaje de WhatsApp.', 'success');
+
+                } catch (error) {
+                    console.error('Error al generar la hoja de pedido (simulado):', error);
+                    showMessage(`Error al generar la hoja de pedido: ${error.message}. No se enviará por WhatsApp.`, 'error');
+                    return; // Detener si hay un error en la generación de la hoja
+                }
+
+                // Construir el mensaje de WhatsApp con la URL de la hoja
+                let whatsappMessage = `*Nuevo Pedido de Ropa Infantil*\n\n`;
+                whatsappMessage += `*Fecha del Pedido:* ${fullOrderData.customer.orderDate}\n`;
+                whatsappMessage += `*Vendedor:* ${fullOrderData.customer.sellerName}\n\n`;
+
+                whatsappMessage += `*Datos del Cliente:*\n`;
+                whatsappMessage += `Nombre: ${fullOrderData.customer.customerName}\n`;
+                if (fullOrderData.customer.customerNit) {
+                    whatsappMessage += `NIT: ${fullOrderData.customer.customerNit}\n`;
+                }
+                whatsappMessage += `Dirección: ${fullOrderData.customer.customerAddress}\n`;
+                whatsappMessage += `Ciudad: ${fullOrderData.customer.customerCity}\n`;
+                whatsappMessage += `Teléfono: ${fullOrderData.customer.customerPhone}\n`;
+                if (fullOrderData.customer.customerEmail) {
+                    whatsappMessage += `Email: ${fullOrderData.customer.customerEmail}\n`;
+                }
+                whatsappMessage += `\n`;
+
+                whatsappMessage += `*Detalles de Productos:*\n`;
+                fullOrderData.products.forEach(product => {
+                    whatsappMessage += `\n- Ref: ${product.reference}\n`;
+                    whatsappMessage += `  Producto: ${product.name}\n`;
+                    whatsappMessage += `  Precio U.: $${product.price.toFixed(2)}\n`;
+                    whatsappMessage += `  Cantidad: ${product.quantity}\n`;
+                    whatsappMessage += `  Total Item: $${product.total.toFixed(2)}\n`;
+                    if (product.notes) {
+                        whatsappMessage += `  Notas: ${product.notes}\n`;
+                    }
+                });
+
+                whatsappMessage += `\n*Total General del Pedido: $${fullOrderData.grandTotal.toFixed(2)}*\n`;
+                whatsappMessage += `\n*Ver detalles completos en Google Sheet:*\n${sheetUrl}\n`; // Añade la URL de la hoja
+                whatsappMessage += `\n¡Gracias!`;
+
+                const encodedMessage = encodeURIComponent(whatsappMessage);
+                const phoneNumber = ''; // Dejar vacío para que el usuario elija el contacto
+
+                const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
+                window.open(whatsappUrl, '_blank');
+            });
+        });
+    </script>
+</body>
+</html>
