@@ -1,0 +1,8 @@
+[build]
+  publish = "." # Esto le dice a Netlify que tu sitio web está en la raíz del repositorio
+  command = ""  # No hay comando de construcción para un sitio HTML/JS simple
+
+[functions]
+  directory = "netlify/functions" # Esto le dice a Netlify dónde están tus funciones
+  node_bundler = "esbuild" # Recomendado para funciones de Node.js
+  node_version = "18" # Especifica la versión de Node.js, puedes usar "16" o "20" también
