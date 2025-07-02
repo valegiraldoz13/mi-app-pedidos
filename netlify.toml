@@ -4,5 +4,7 @@
 
 [functions]
   directory = "netlify/functions" # Esto le dice a Netlify dónde están tus funciones
+
+[functions."*"] # Aplica esta configuración a TODAS tus funciones
   node_bundler = "esbuild" # Recomendado para funciones de Node.js
-  node_version = "18" # Especifica la versión de Node.js, puedes usar "16" o "20" también
+  node_version = "18" # Especifica la versión de Node.js
