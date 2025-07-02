@@ -1,0 +1,15 @@
+{
+  "name": "netlify-functions",
+  "version": "1.0.0",
+  "description": "Funciones de Netlify para la app de pedidos",
+  "main": "generate-order-sheet.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "googleapis": "^120.0.0"
+  }
+}
