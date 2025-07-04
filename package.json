@@ -1,0 +1,26 @@
+{
+  "name": "mi-app-pedidos-netlify",
+  "version": "1.0.0",
+  "description": "Aplicación de gestión de pedidos para Creaciones Toñitos en Netlify",
+  "main": "index.html",
+  "scripts": {
+    "start": "netlify dev",
+    "build": "echo 'No build command needed for static site'"
+  },
+  "keywords": [
+    "netlify",
+    "google-sheets",
+    "javascript",
+    "html",
+    "css",
+    "functions"
+  ],
+  "author": "Tu Nombre",
+  "license": "ISC",
+  "dependencies": {
+    "googleapis": "^120.0.0"
+  },
+  "devDependencies": {
+    "netlify-cli": "^17.16.0"
+  }
+}
