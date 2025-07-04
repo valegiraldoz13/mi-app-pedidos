@@ -1,6 +1,6 @@
 [build]
   publish = "." # Esto le dice a Netlify que tu sitio web está en la raíz del repositorio
-  command = ""  # No hay comando de construcción para un sitio HTML/JS simple
+  command = " "  # No hay comando de construcción para un sitio HTML/JS simple
 
 [functions]
   directory = "netlify/functions" # Esto le dice a Netlify dónde están tus funciones

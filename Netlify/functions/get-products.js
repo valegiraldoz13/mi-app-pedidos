@@ -1,4 +1,4 @@
-// netlify/functions/get-products.js
+// netlify/functions/get-products.js 
 
 // Importa las librerías de Google APIs para Node.js
 const { google } = require('googleapis');
