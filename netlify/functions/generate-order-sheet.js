@@ -83,16 +83,18 @@ exports.handler = async (event, context) => {
         const newSheetName = `Pedido - ${customerName} - ${orderDate} - ${Date.now()}`; // Añadir timestamp para unicidad
 
         // 7. Copiar la hoja de plantilla
-        const copyResponse = await drive.files.copy({
-            fileId: templateSpreadsheetId,
-            requestBody: {
-                name: newSheetName,
-                parents: folderId ? [folderId] : [], // Si se especificó una carpeta
-            },
-        });
-        const newSpreadsheetId = copyResponse.data.id;
-        const newSpreadsheetUrl = copyResponse.data.webViewLink; // URL de la nueva hoja
-        console.log('URL de la nueva hoja generada:', newSpreadsheetUrl); // ¡AÑADE ESTA LÍNEA!
+const copyResponse = await drive.files.copy({
+    fileId: templateSpreadsheetId,
+    requestBody: {
+        name: newSheetName,
+        parents: folderId ? [folderId] : [], // Si se especificó una carpeta
+    },
+    supportsAllDrives: true, // ¡AÑADE ESTA LÍNEA! Esto es importante para cuentas de servicio
+});
+console.log('Respuesta completa de copyResponse.data:', copyResponse.data); // ¡AÑADE ESTA LÍNEA!
+const newSpreadsheetId = copyResponse.data.id;
+const newSpreadsheetUrl = copyResponse.data.webViewLink; // URL de la nueva hoja
+console.log('URL de la nueva hoja generada:', newSpreadsheetUrl); // Ya la tienes, pero la dejamos
 
         // 8. Escribir los datos del pedido en la nueva hoja
         const orderNumber = `ORD-${Date.now()}`; // Genera un número de pedido único basado en el tiempo
