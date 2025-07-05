@@ -92,6 +92,7 @@ exports.handler = async (event, context) => {
         });
         const newSpreadsheetId = copyResponse.data.id;
         const newSpreadsheetUrl = copyResponse.data.webViewLink; // URL de la nueva hoja
+        console.log('URL de la nueva hoja generada:', newSpreadsheetUrl); // ¡AÑADE ESTA LÍNEA!
 
         // 8. Escribir los datos del pedido en la nueva hoja
         const orderNumber = `ORD-${Date.now()}`; // Genera un número de pedido único basado en el tiempo
