@@ -89,12 +89,12 @@ const copyResponse = await drive.files.copy({
         name: newSheetName,
         parents: folderId ? [folderId] : [], // Si se especificó una carpeta
     },
-    supportsAllDrives: true, // ¡AÑADE ESTA LÍNEA! Esto es importante para cuentas de servicio
+    fields: 'id,name,webViewLink', // ¡AÑADE ESTA LÍNEA! Solicita explícitamente el webViewLink
 });
-console.log('Respuesta completa de copyResponse.data:', copyResponse.data); // ¡AÑADE ESTA LÍNEA!
+console.log('Respuesta completa de copyResponse.data:', copyResponse.data); // Deja esta línea de depuración
 const newSpreadsheetId = copyResponse.data.id;
 const newSpreadsheetUrl = copyResponse.data.webViewLink; // URL de la nueva hoja
-console.log('URL de la nueva hoja generada:', newSpreadsheetUrl); // Ya la tienes, pero la dejamos
+console.log('URL de la nueva hoja generada:', newSpreadsheetUrl); // Deja esta línea de depuración
 
         // 8. Escribir los datos del pedido en la nueva hoja
         const orderNumber = `ORD-${Date.now()}`; // Genera un número de pedido único basado en el tiempo
