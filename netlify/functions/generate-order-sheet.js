@@ -1,4 +1,4 @@
-// netlify/functions/generate-order-sheet.js 
+// netlify/functions/generate-order-sheet.js
 
 // Importa las librerías de Google APIs para Node.js
 const { google } = require('googleapis');
@@ -51,6 +51,7 @@ exports.handler = async (event, context) => {
 
     // 4. Obtener el ID de la plantilla de Google Sheet y el ID de la carpeta de Drive
     const templateSpreadsheetId = process.env.GOOGLE_SHEET_TEMPLATE_ID;
+    console.log('ID de plantilla leído de variable de entorno:', templateSpreadsheetId); // ¡ESTA LÍNEA DE DEPURACIÓN ES CRUCIAL!
     const folderId = process.env.GOOGLE_DRIVE_FOLDER_ID; // Opcional: si configuraste una carpeta
 
     if (!templateSpreadsheetId) {
