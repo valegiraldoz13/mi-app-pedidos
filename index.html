@@ -198,6 +198,11 @@
             const messageContainer = document.getElementById('messageContainer');
             const grandTotalDisplay = document.getElementById('grandTotal');
 
+            // --- Define el número de WhatsApp aquí ---
+            // Reemplaza 'CODIGOPAISNUMERO' con el número real (ej: '573001234567' para Colombia).
+            const whatsappNumber = '573175752423'; 
+            // Si lo dejas vacío (''), WhatsApp pedirá al usuario que elija el contacto.
+
             // --- Cargar productos desde la Netlify Function al iniciar la página ---
             try {
                 showMessage('Cargando productos...', 'info');
@@ -379,7 +384,7 @@
                     return;
                 }
 
-                // Paso 1: Generar nueva hoja y enviar por WhatsApp
+                // Paso 1: Generar nueva hoja de pedido en Google Sheets
                 showMessage('Generando hoja de pedido y preparando mensaje de WhatsApp...', 'info');
                 const generateSheetFunctionUrl = '/.netlify/functions/generate-order-sheet'; // URL de tu función
 
@@ -397,44 +402,26 @@
                         showMessage('Hoja de pedido generada. Preparando mensaje de WhatsApp.', 'success');
 
                         // Construir el mensaje de WhatsApp con la URL de la hoja
-                        let whatsappMessage = `*Nuevo Pedido de Ropa Infantil*\n\n`;
-                        whatsappMessage += `*Fecha del Pedido:* ${fullOrderData.customer.orderDate}\n`;
+                        let whatsappMessage = `*Nuevo Pedido Creaciones Toñitos*\n\n`; // Título modificado
+                        whatsappMessage += `*Fecha:* ${fullOrderData.customer.orderDate}\n`;
                         whatsappMessage += `*Vendedor:* ${fullOrderData.customer.sellerName}\n\n`;
-
-                        whatsappMessage += `*Datos del Cliente:*\n`;
-                        whatsappMessage += `Nombre: ${fullOrderData.customer.customerName}\n`;
-                        if (fullOrderData.customer.customerNit) {
-                            whatsappMessage += `NIT: ${fullOrderData.customer.customerNit}\n`;
-                        }
-                        whatsappMessage += `Dirección: ${fullOrderData.customer.customerAddress}\n`;
-                        whatsappMessage += `Ciudad: ${fullOrderData.customer.customerCity}\n`;
-                        whatsappMessage += `Teléfono: ${fullOrderData.customer.customerPhone}\n`;
-                        if (fullOrderData.customer.customerEmail) {
-                            whatsappMessage += `Email: ${fullOrderData.customer.customerEmail}\n`;
-                        }
-                        whatsappMessage += `\n`;
-
-                        whatsappMessage += `*Detalles de Productos:*\n`;
-                        fullOrderData.products.forEach(product => {
-                            whatsappMessage += `\n- Ref: ${product.reference}\n`;
-                            whatsappMessage += `  Producto: ${product.name}\n`;
-                            whatsappMessage += `  Precio U.: $${product.price.toFixed(2)}\n`;
-                            whatsappMessage += `  Cantidad: ${product.quantity}\n`;
-                            whatsappMessage += `  Total Item: $${product.total.toFixed(2)}\n`;
-                            if (product.notes) {
-                                whatsappMessage += `  Notas: ${product.notes}\n`;
-                            }
-                        });
-
-                        whatsappMessage += `\n*Total General del Pedido: $${fullOrderData.grandTotal.toFixed(2)}*\n`;
-                        whatsappMessage += `\n*Ver detalles completos en Google Sheet:*\n${sheetUrl}\n`; // Añade la URL de la hoja
+                        whatsappMessage += `*Cliente:* ${fullOrderData.customer.customerName}\n`;
+                        whatsappMessage += `*NIT:* ${fullOrderData.customer.customerNit}\n`;
+                        whatsappMessage += `*Ciudad:* ${fullOrderData.customer.customerCity}\n\n`;
+                        whatsappMessage += `*Total del pedido:* $${fullOrderData.grandTotal.toFixed(2)}\n`; // Solo total
+                        whatsappMessage += `*Ver detalles completos:* ${sheetUrl}\n`; // Link
                         whatsappMessage += `\n¡Gracias!`;
 
-                        const encodedMessage = encodeURIComponent(whatsappMessage);
-                        const phoneNumber = '573175752423'; // Número de WhatsApp configurado
 
-                        const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodedMessage}`;
-                        window.open(whatsappUrl, '_blank');
+                        const encodedMessage = encodeURIComponent(whatsappMessage);
+
+                        // --- Abrir WhatsApp para el número único ---
+                        if (whatsappNumber) { // Asegurarse de que el número no esté vacío
+                            const whatsappUrl = `https://wa.me/${whatsappNumber}?text=${encodedMessage}`;
+                            window.open(whatsappUrl, '_blank');
+                        } else {
+                            showMessage('Número de WhatsApp no configurado. Abra WhatsApp manualmente.', 'warning');
+                        }
 
                     } else {
                         throw new Error(result.error || 'No se pudo generar la URL de la hoja.');
@@ -447,7 +434,7 @@
                     return;
                 }
 
-                // Paso 2: Registrar pedido en la hoja existente
+                // Paso 2: Registrar pedido en la hoja existente (si aún quieres esta funcionalidad)
                 showMessage('Registrando pedido en la hoja existente...', 'info');
                 const addOrderFunctionUrl = '/.netlify/functions/add-order-to-sheet'; // URL de tu función para la hoja existente
 
